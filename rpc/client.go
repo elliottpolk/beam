@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/rpc"
 	"os"
+	"sync"
 
 	"github.com/elliottpolk/beam/log"
 
@@ -120,24 +121,30 @@ func (c *Client) DownloadAt(from, to string, block int64) error {
 	}
 	defer c.CloseSession(id)
 
+	var wg sync.WaitGroup
+
 	for i := block; i < blocks; i++ {
-		buf, err := c.GetBlock(id, i)
-		if err != nil && err != io.EOF {
-			return err
-		}
+		wg.Add(1)
+		go func(i int64) {
+			defer wg.Done()
 
-		if _, err := out.WriteAt(buf, i*BlockSize); err != nil {
-			return err
-		}
+			buf, err := c.GetBlock(id, i)
+			if err != nil && err != io.EOF {
+				log.Error(err, "unable to retrieve block")
+				return
+			}
 
-		if i%((blocks-id)/100+1) == 0 {
-			log.Infof("downloading %s [%d/%d] blocks", from, i-block+1, blocks-block)
-		}
+			if _, err := out.WriteAt(buf, i*BlockSize); err != nil {
+				log.Error(err, "unable to write block")
+				return
+			}
 
-		if err == io.EOF {
-			break
-		}
+			if i%((blocks-id)/100+1) == 0 {
+				log.Infof("downloading %s [%d/%d] blocks", from, i-block+1, blocks-block)
+			}
+		}(i)
 	}
 
+	wg.Wait()
 	return nil
 }

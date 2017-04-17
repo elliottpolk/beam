@@ -18,7 +18,7 @@ func WithJson(w http.ResponseWriter, data interface{}) {
 		return
 	}
 
-	out, err := json.Marshal(data)
+	out, err := json.MarshalIndent(data, "", "   ")
 	if err != nil {
 		WithError(w, http.StatusInternalServerError, "unable to convert results to json: %v\n", err)
 		return

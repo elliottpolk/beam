@@ -19,11 +19,12 @@ import (
 )
 
 const (
-	AddrFlag  string = "addr"
-	DirFlag   string = "dir"
-	FromFlag  string = "from"
-	ToFlag    string = "to"
-	BlockFlag string = "block"
+	AddrFlag       string = "addr"
+	DirFlag        string = "dir"
+	FromFlag       string = "from"
+	ToFlag         string = "to"
+	BlockFlag      string = "block"
+	ConcurrentFlag string = "concurrent"
 
 	DefaultAddr  string = ":8888"
 	DefaultDir   string = "."

@@ -4,9 +4,7 @@
 //
 package client
 
-import (
-	"github.com/elliottpolk/beam/rpc"
-)
+import "github.com/elliottpolk/beam/rpc"
 
 func DialAndDownload(addr, from, to string) error {
 	return DialAndDownloadAt(addr, from, to, 0)
