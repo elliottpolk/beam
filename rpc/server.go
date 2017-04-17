@@ -90,7 +90,7 @@ func (r *Rpc) Read(req ReadRequest, res *ReadResponse) error {
 	res.Size = n
 	res.Data = res.Data[:res.Size]
 
-	log.Infof("read session %d, read %d[bytes]", req.Id, res.Size)
+	// log.Infof("read session %d, read %d[bytes]", req.Id, res.Size)
 	return nil
 }
 
@@ -113,6 +113,6 @@ func (r *Rpc) ReadAt(req ReadRequest, res *ReadResponse) error {
 	res.Size = n
 	res.Data = res.Data[:n]
 
-	log.Infof("read session %d, offset %d, n %d", req.Id, req.Offset, res.Size)
+	// log.Infof("read session %d, offset %d, n %d", req.Id, req.Offset, res.Size)
 	return nil
 }
